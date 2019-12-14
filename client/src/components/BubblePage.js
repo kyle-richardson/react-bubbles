@@ -9,6 +9,7 @@ const BubblePage = ({getBubbles}) => {
 
   useEffect(()=> {
     getBubbles()
+    // eslint-disable-next-line
   },[])
 
   return (

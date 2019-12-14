@@ -48,7 +48,7 @@ export const addColor = (event, newColor) => dispatch => {
   event.preventDefault()
   dispatch({ type: ADD_COLOR_START });
   axiosWithAuth()
-    .post('http://localhost:5000/api/friends', newColor)
+    .post('http://localhost:5000/api/colors', newColor)
     .then(res =>
       dispatch({ type: ADD_COLOR_SUCCESS, payload: res.data.payload })
     )
