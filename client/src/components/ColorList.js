@@ -47,7 +47,7 @@ const ColorList = (
           </li>
         ))}
       </ul>
-      {editing && (
+      {editing ? (
         <form onSubmit={e=> {
           e.preventDefault()
           saveEdit(colorToEdit)
@@ -78,40 +78,37 @@ const ColorList = (
             <button onClick={cancelEdit}>cancel</button>
           </div>
         </form>
-      )}
+      ) :
+      <form onSubmit={e=> {
+        addColor(e, newColor)
+      }}>
+        <legend>new color</legend>
+        <label>
+          color name:
+          <input
+            name="color"
+            onChange={e =>
+              handleChange(e, 'newColor')
+            }
+            value={newColor.color}
+          />
+        </label>
+        <label>
+          hex code:
+          <input
+            name="code"
+            onChange={e =>
+              handleChange(e, 'newColor')
+            }
+            value={newColor.code.hex}
+          />
+        </label>
+        <div className="button-row">
+          <button type="submit">create</button>
+        </div>
+      </form>
+      }
       <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
-      {!editing && 
-      <div>
-        <form onSubmit={e=> {
-          addColor(e, newColor)
-        }}>
-          <legend>new color</legend>
-          <label>
-            color name:
-            <input
-              name="color"
-              onChange={e =>
-                handleChange(e, 'newColor')
-              }
-              value={newColor.color}
-            />
-          </label>
-          <label>
-            hex code:
-            <input
-              name="code"
-              onChange={e =>
-                handleChange(e, 'newColor')
-              }
-              value={newColor.code.hex}
-            />
-          </label>
-          <div className="button-row">
-            <button type="submit">create</button>
-          </div>
-        </form>
-      </div>}
     </div>
   );
 };

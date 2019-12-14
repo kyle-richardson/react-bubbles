@@ -37,6 +37,7 @@ const initialState = {
     },
     token: '',
     colorToEdit: {},
+    reFetch: false
 
 }
 
@@ -136,13 +137,19 @@ switch (type) {
         return {
             ...state,
             err: '',
-            bubbleList: payload,
-            isAdding: false
+            // bubbleList: [...state.bubbleList, state.newColor],
+            isAdding: false,
+            reFetch: !state.reFetch,
+            newColor: {
+                color: "",
+                code: { hex: "" }
+            },
         }
     case DELETE_COLOR:
         return {
             ...state,
-            bubbleList: state.bubbleList.filter(color => `${color.id}` !== payload)
+            // bubbleList: state.bubbleList.filter(color => `${color.id}` !== payload)
+            reFetch: !state.reFetch
         }
     case EDIT_START:
         return {
@@ -157,10 +164,11 @@ switch (type) {
             error: '',
             isEditing: false,
             colorToEdit: {},
-            bubbleList: state.bubbleList.map(color=>{
-                if(`${color.id}`===payload.id) return payload
-                return color
-            })
+            // bubbleList: state.bubbleList.map(color=>{
+            //     if(`${color.id}`===payload.id) return payload
+            //     return color
+            // })
+            reFetch: !state.reFetch
         }
     case EDIT_FAIL:
         return {
