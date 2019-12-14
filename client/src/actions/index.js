@@ -16,6 +16,7 @@ export const DELETE_COLOR='DELETE_COLOR'
 export const EDIT_START = 'EDIT_START'
 export const EDIT_SUCCESS = 'EDIT_SUCCESS'
 export const EDIT_FAIL = 'EDIT_FAIL'
+export const CANCEL_EDIT = 'CANCEL_EDIT'
 
 export const getBubbles = () => dispatch => {
   dispatch({ type: GET_BUBBLES_START });
@@ -59,9 +60,9 @@ export const startEdit = (id)=> ({
   type: EDIT_START,
   payload: id
 })
-export const finishEdit = (friend, id) => dispatch => {
+export const saveEdit = (color) => dispatch => {
   axiosWithAuth()
-    .put(`http://localhost:5000/api/friends/${id}`, friend)
+    .put(`http://localhost:5000/api/colors/${color.id}`, color)
     .then(res =>
       dispatch({ type: EDIT_SUCCESS, payload: res.data.payload })
     )
@@ -78,7 +79,7 @@ export const deleteColor = color => dispatch=> {
 }
 export const handleChange = (event, formType) => ({
     type: HANDLE_CHANGE,
-    payload: { event: event, form: formType}
+    payload: { target: event.target, form: formType}
 })
 
 export const setColors = list => ({
@@ -92,6 +93,10 @@ export const logout = ()=> dispatch => {
     type: LOGOUT
 })
 }
+
+export const cancelEdit = ()=> ({
+  type: CANCEL_EDIT
+})
 
 
 

@@ -1,37 +1,16 @@
-import React, { useState } from "react";
-import {axiosWithAuth} from "../AxiosWithAuth";
-import {setColors, deleteColor} from "../actions"
+import React from "react";
+import {setColors, deleteColor, startEdit, saveEdit, cancelEdit, handleChange} from "../actions"
 import {connect} from "react-redux"
 
-const initialColor = {
-  color: "",
-  code: { hex: "" }
-};
-
-const ColorList = ({ colors, setColors, deleteColor}) => {
-  const [editing, setEditing] = useState(false);
-  const [colorToEdit, setColorToEdit] = useState(initialColor);
-
-  const editColor = color => {
-    setEditing(true);
-    setColorToEdit(color);
-  };
-
-  const saveEdit = e => {
-    e.preventDefault();
-    axiosWithAuth()
-      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
-      .then(res=>setEditing(false))
-      .catch(err=>console.log(err))
-    
-  };
+const ColorList = ({ colors, saveEdit, startEdit, deleteColor, editing, colorToEdit, cancelEdit, handleChange}) => {
+  
 
   return (
     <div className="colors-wrap">
       <p>colors</p>
       <ul>
         {colors.map(color => (
-          <li key={color.color} onClick={() => editColor(color)}>
+          <li key={color.color} onClick={() => startEdit(color.id)}>
             <span>
               <span className="delete" onClick={e => {
                     e.stopPropagation();
@@ -50,13 +29,17 @@ const ColorList = ({ colors, setColors, deleteColor}) => {
         ))}
       </ul>
       {editing && (
-        <form onSubmit={saveEdit}>
+        <form onSubmit={e=> {
+          e.preventDefault()
+          saveEdit(colorToEdit)
+        }}>
           <legend>edit color</legend>
           <label>
             color name:
             <input
+              name="color"
               onChange={e =>
-                setColorToEdit({ ...colorToEdit, color: e.target.value })
+                handleChange(e, 'colorToEdit')
               }
               value={colorToEdit.color}
             />
@@ -64,18 +47,16 @@ const ColorList = ({ colors, setColors, deleteColor}) => {
           <label>
             hex code:
             <input
+              name="code"
               onChange={e =>
-                setColorToEdit({
-                  ...colorToEdit,
-                  code: { hex: e.target.value }
-                })
+                handleChange(e, 'colorToEdit')
               }
               value={colorToEdit.code.hex}
             />
           </label>
           <div className="button-row">
             <button type="submit">save</button>
-            <button onClick={() => setEditing(false)}>cancel</button>
+            <button onClick={cancelEdit}>cancel</button>
           </div>
         </form>
       )}
@@ -87,8 +68,10 @@ const ColorList = ({ colors, setColors, deleteColor}) => {
 
 const mapStateToProps = state => ({
   colors: state.bubbleList,
+  editing: state.isEditing,
+  colorToEdit: state.colorToEdit
 
 })
 
-export default connect(mapStateToProps,{ setColors, deleteColor})(ColorList);
+export default connect(mapStateToProps,{ setColors, deleteColor, startEdit, saveEdit, cancelEdit, handleChange})(ColorList);
 

@@ -3,8 +3,6 @@ import {connect} from "react-redux"
 import {handleChange, login} from "../actions"
 
 const Login = ({history, error, login,credentials, handleChange, token}) => {
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
   useEffect(()=> {
     if(!!token){
       localStorage.setItem('token', token);

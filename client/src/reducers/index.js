@@ -14,7 +14,8 @@ import {
     DELETE_COLOR,
     EDIT_START,
     EDIT_SUCCESS,
-    EDIT_FAIL
+    EDIT_FAIL,
+    CANCEL_EDIT
     } 
 from "../actions"
 
@@ -35,7 +36,7 @@ const initialState = {
         code: { hex: "" }
     },
     token: '',
-    editedColor: {},
+    colorToEdit: {},
 
 }
 
@@ -82,9 +83,14 @@ switch (type) {
     case HANDLE_CHANGE:
         return {
             ...state,
-            [payload.form]: {
+            [payload.form]: 
+            payload.target.name==='code' ? {
                 ...state[payload.form],
-                [payload.event.target.name]: payload.event.target.value,
+                code: {hex: payload.target.value}
+            } : 
+            {
+                ...state[payload.form],
+                [payload.target.name]: payload.target.value
             }
         }
     case SET_COLORS:
@@ -111,7 +117,7 @@ switch (type) {
                 code: { hex: "" }
             },
             token: '',
-            editedColor: {},
+            colorToEdit: {},
         }
     case ADD_COLOR_START:
         return {
@@ -143,14 +149,14 @@ switch (type) {
             ...state,
             error: '',
             isEditing: true,
-            editedColor: state.friendsList.find(friend=> friend.id===payload)
+            colorToEdit: state.bubbleList.find(color=> `${color.id}`===`${payload}`)
         }
     case EDIT_SUCCESS:
         return {
             ...state,
             error: '',
             isEditing: false,
-            editedColor: {},
+            colorToEdit: {},
             bubbleList: state.bubbleList.map(color=>{
                 if(`${color.id}`===payload.id) return payload
                 return color
@@ -158,9 +164,17 @@ switch (type) {
         }
     case EDIT_FAIL:
         return {
+            ...state,
             error: payload,
             isEditing: false,
-            editedFriend: {}
+            colorToEdit: {}
+        }
+    case CANCEL_EDIT:
+        return {
+            ...state,
+            isEditing: false,
+            colorToEdit: {},
+            error: ''
         }
     default: 
         return state
