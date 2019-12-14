@@ -1,20 +1,28 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, {useEffect } from "react";
 
 import Bubbles from "./Bubbles";
 import ColorList from "./ColorList";
+import {getBubbles} from "../actions"
+import {connect} from "react-redux"
 
-const BubblePage = () => {
-  const [colorList, setColorList] = useState([]);
-  // fetch your colors data from the server when the component mounts
-  // set that data to the colorList state property
+const BubblePage = ({getBubbles, reFetch}) => {
+
+  useEffect(()=> {
+    getBubbles()
+    // eslint-disable-next-line
+  },[reFetch])
 
   return (
     <>
-      <ColorList colors={colorList} updateColors={setColorList} />
-      <Bubbles colors={colorList} />
+      <ColorList />
+      <Bubbles />
     </>
   );
 };
 
-export default BubblePage;
+const mapStateToProps = state => ({
+  bubbleList: state.bubbleList,
+  reFetch: state.reFetch
+})
+
+export default connect(mapStateToProps,{getBubbles})(BubblePage);
