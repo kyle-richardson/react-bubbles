@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom"
 import {
   setColors, 
   deleteColor, 
@@ -6,7 +7,8 @@ import {
   saveEdit, 
   cancelEdit, 
   handleChange,
-  addColor
+  addColor,
+  logout
 } from "../actions"
 import {connect} from "react-redux"
 
@@ -20,7 +22,8 @@ const ColorList = (
     cancelEdit, 
     handleChange,
     addColor,
-    newColor
+    newColor, 
+    logout
   }) => {
   
 
@@ -108,6 +111,9 @@ const ColorList = (
         </div>
       </form>
       }
+      <Link to="/" onClick={logout}>
+        <div style={{background: 'black', color: 'white', padding: '5px', marginTop: '40px'}}>Logout</div>
+      </Link>
       <div className="spacer" />
     </div>
   );
@@ -129,6 +135,7 @@ export default connect(mapStateToProps,
     saveEdit, 
     cancelEdit, 
     handleChange,
-    addColor
+    addColor,
+    logout
   })(ColorList);
 
